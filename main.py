@@ -1,38 +1,38 @@
-# To run and test the code you need to update 4 places:
-# 1. Change MY_EMAIL/MY_PASSWORD to your own details.
-# 2. Go to your email provider and make it allow less secure apps.
-# 3. Update the SMTP ADDRESS to match your email provider.
-# 4. Update birthdays.csv to contain today's month and day.
-# See the solution video in the 100 Days of Python Course for explainations.
+import requests
+import json
+from twilio.rest import Client
+def send_message(body):
+    message=client.messages.create(
+        from_='whatsapp:+14155238886',
+        # content_sid='HXb5b62575e6e4ff6129ad7c8efe1f983e',
+        # content_variables='{"1":"12/1","2":"3pm"}',
+        body=body,
+        to='whatsapp:+14125769428'
+    )
+
+ACCOUNT_SID="ACff0454cc55c0798d5fbd5d9b3cefdf9a"
+AUTH_TOKEN="e6e1fa7b5c69d4828032a36b35da1b5e"
+
+API_KEY="2c81d90efa378062a3abf12780ce96a3"
+parms={
+    "lat":47.547,
+    "lon":-124.233,
+    "appid":API_KEY,
+    "cnt":4
+}
+
+client=Client(ACCOUNT_SID,AUTH_TOKEN)
+
+response=requests.get('https://api.openweathermap.org/data/2.5/forecast',params=parms)
+response.raise_for_status()
+output=response.json()
+
+# print(json.dumps(output,indent=4))
 
 
-from datetime import datetime
-import pandas
-import random
-import smtplib
-import os
+weather_data=output['list'][0]['weather'][0]['id']
 
-# import os and use it to get the Github repository secrets
-MY_EMAIL = os.environ.get("MY_EMAIL")
-MY_PASSWORD = os.environ.get("MY_PASSWORD")
-
-today = datetime.now()
-today_tuple = (today.month, today.day)
-
-data = pandas.read_csv("birthdays.csv")
-birthdays_dict = {(data_row["month"], data_row["day"])                  : data_row for (index, data_row) in data.iterrows()}
-if today_tuple in birthdays_dict:
-    birthday_person = birthdays_dict[today_tuple]
-    file_path = f"letter_templates/letter_{random.randint(1, 3)}.txt"
-    with open(file_path) as letter_file:
-        contents = letter_file.read()
-        contents = contents.replace("[NAME]", birthday_person["name"])
-
-    with smtplib.SMTP("YOUR EMAIL PROVIDER SMTP SERVER ADDRESS") as connection:
-        connection.starttls()
-        connection.login(MY_EMAIL, MY_PASSWORD)
-        connection.sendmail(
-            from_addr=MY_EMAIL,
-            to_addrs=birthday_person["email"],
-            msg=f"Subject:Happy Birthday!\n\n{contents}"
-        )
+for index in range(0,4):
+    if int(output['list'][index]['weather'][0]['id'])<700:
+        send_message("Test again!")
+        break
