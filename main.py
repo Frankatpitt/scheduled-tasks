@@ -11,7 +11,7 @@ def send_message(body):
     )
 
 ACCOUNT_SID="ACff0454cc55c0798d5fbd5d9b3cefdf9a"
-AUTH_TOKEN="e6e1fa7b5c69d4828032a36b35da1b5e"
+AUTH_TOKEN="29889a6d32a2f985f223d01cdbcd1191"
 
 API_KEY="2c81d90efa378062a3abf12780ce96a3"
 parms={
