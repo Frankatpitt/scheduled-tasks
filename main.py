@@ -29,7 +29,7 @@ output=response.json()
 
 # print(json.dumps(output,indent=4))
 
-
+send_message("From github")
 weather_data=output['list'][0]['weather'][0]['id']
 
 for index in range(0,4):
